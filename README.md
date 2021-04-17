@@ -8,3 +8,5 @@
 
 # 项目真机图
 
+![截屏](https://github.com/SakurajimaMaii/GMusic-Compose-Samples/blob/master/IMG/screenshot_1.jpg)
+![截屏](https://github.com/SakurajimaMaii/GMusic-Compose-Samples/blob/master/IMG/screenshot_2.jpg)
