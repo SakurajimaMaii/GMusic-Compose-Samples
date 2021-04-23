@@ -9,5 +9,4 @@ data class LocalMusicBean(
     val singer: String?, //专辑名称
     val album: String?, //歌曲时长
     val duration: String?, //歌曲路径
-    val albumArt: Bitmap?
 )

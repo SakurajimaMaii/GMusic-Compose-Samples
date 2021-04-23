@@ -4,51 +4,32 @@ package com.gcode.jetpacklearn.viewModel
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.AudioManager
-import android.media.MediaMetadataRetriever
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
-import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gcode.jetpacklearn.R
 import com.gcode.jetpacklearn.model.LocalMusicBean
 import com.gcode.jetpacklearn.utils.AppUtils
 import com.gcode.jetpacklearn.utils.MsgUtils
-import java.io.FileDescriptor
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-@RequiresApi(Build.VERSION_CODES.Q)
+@RequiresApi(Build.VERSION_CODES.R)
 class MainViewModel : ViewModel() {
-    //音乐数据源
-    private val cacheMusicData: MutableList<LocalMusicBean> = ArrayList()
     private var mData: MutableList<LocalMusicBean> = ArrayList()
-
-    fun getMData() = mData
 
     //记录当前正在播放的音乐的位置
     private var currentPlayPosition = -1
 
-    fun setCurrentPlayPosition(currentPlayPosition: Int) {
-        this.currentPlayPosition = currentPlayPosition
-    }
-
-    fun getCurrentPlayPosition() = currentPlayPosition
-
     //记录暂停音乐时进度条的位置
     private var currentPausePositionInSong = 0
-
-    fun getCurrentPausePositionInSong() = currentPausePositionInSong
 
     //创建MediaPlayer对象
     private var mediaPlayer: MediaPlayer? = null
@@ -60,7 +41,7 @@ class MainViewModel : ViewModel() {
     val isPlaying:LiveData<Boolean> = _isPlaying
 
     private val _localMusicBean =
-        MutableLiveData(LocalMusicBean(null, null, null, null, null, null, null))
+        MutableLiveData(LocalMusicBean(null, null, null, null, null, null))
 
     val localMusicBean: LiveData<LocalMusicBean>
         get() = _localMusicBean
@@ -92,7 +73,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SimpleDateFormat")
     private fun loadLocalMusicData() {
         //加载本地文件到集合中
@@ -112,66 +92,64 @@ class MainViewModel : ViewModel() {
                 MsgUtils.showShortMsg(AppUtils.context, "设备上没有歌曲")
             }
             else -> {
+                val sliderLastAdjusted = System.currentTimeMillis()
                 var no = 0
                 do {
                     if (cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)) != "<unknown>" &&
                         cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)) != "<unknown>"
                     ) {
                         no++
-                        val song =
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-                        val singer =
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                        val album =
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                        val song = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
+                        val singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                        val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
                         val id: Long = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
-                        val mp = getAlbumArt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)))
                         val sdf = SimpleDateFormat("mm:ss")
                         val time = sdf.format(Date(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))))
-                        val bean = LocalMusicBean(id, no, song, singer, album, time, mp)
-                        if(mp == null){
-                            Log.i("MainViewModel","未获取到专辑图片")
-                        }
+                        val bean = LocalMusicBean(id, no, song, singer, album, time)
                         mData.add(bean)
                     }
                 } while (cursor.moveToNext())
+                val newTime = System.currentTimeMillis()
+                Log.d("MainViewModel","${newTime-sliderLastAdjusted}")
             }
+        }
+        cursor?.close()
+    }
+
+    fun playLastMusic(){
+        if(currentPlayPosition==0||currentPlayPosition==-1){
+            MsgUtils.showShortMsg(AppUtils.context, "已经是第一首了，没有上一曲！")
+        }else{
+            //获取上一首歌曲
+            val lastMusicBean = mData[currentPlayPosition-1]
+            currentPlayPosition-=1
+            playMusicInMusicBean(lastMusicBean)
         }
     }
 
-    private fun getAlbumArt(albumPath: String?): Bitmap {
-        //歌曲检索
-        val mmr = MediaMetadataRetriever()
-        //设置数据源
-        if (albumPath != null) {
-            Log.d("getAlbumArt", albumPath)
-        }
-        mmr.setDataSource(albumPath)
-        //获取图片数据
-        val data = mmr.embeddedPicture
-        return if (data != null) {
-            BitmapFactory.decodeByteArray(data, 0, data.size)
+    fun playCurrentMusic(){
+        if (currentPlayPosition == -1) {
+            MsgUtils.showShortMsg(AppUtils.context, "请选择想要播放的音乐")
         } else {
-            BitmapFactory.decodeResource(AppUtils.context.resources, R.drawable.user)
+            if (mediaPlayer?.isPlaying == true) {
+                //此时处于播放状态，需要暂停音乐
+                pauseMusic()
+            } else {
+                //此时没有播放音乐，点击开始播放音乐
+                playMusic()
+            }
         }
     }
 
-    private fun getAlbumArt(album_id: Long?): Bitmap {
-        var bm: Bitmap? = null
-        try {
-            val sArtworkUri: Uri = Uri
-                .parse("content://media/external/audio/album")
-            val uri: Uri = ContentUris.withAppendedId(sArtworkUri, album_id!!)
-            val pfd: ParcelFileDescriptor? = AppUtils.context.contentResolver
-                .openFileDescriptor(uri, "r")
-            if (pfd != null) {
-                val fd: FileDescriptor = pfd.fileDescriptor
-                bm = BitmapFactory.decodeFileDescriptor(fd)
-            }
-        } catch (e: Exception) {
-
+    fun playNextMusic(){
+        if(currentPlayPosition==mData.size-1||currentPlayPosition==mData.size){
+            MsgUtils.showShortMsg(AppUtils.context, "已经是最后一首了，没有下一曲！")
+        }else{
+            //获取上一首歌曲
+            val nextMusicBean = mData[currentPlayPosition+1]
+            currentPlayPosition+=1
+            playMusicInMusicBean(nextMusicBean)
         }
-        return bm ?: BitmapFactory.decodeResource(AppUtils.context.resources, R.drawable.user)
     }
 
     fun playMusicInMusicBean(musicBean: LocalMusicBean) {
@@ -190,7 +168,7 @@ class MainViewModel : ViewModel() {
                             it
                         )
                     }
-                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
                 if (contentUri != null) {
                     setDataSource(AppUtils.context, contentUri)
                 }
@@ -205,13 +183,11 @@ class MainViewModel : ViewModel() {
         onMusicChanged(musicBean)
     }
 
-    fun playMusic() {
+    private fun playMusic() {
         //播放音乐的函数
         if (mediaPlayer != null && !mediaPlayer!!.isPlaying) {
             if (currentPausePositionInSong == 0) {
                 try {
-                    //判断播放器是否被占用
-                    Log.d("MainActivity", "playMusic()")
                     mediaPlayer!!.prepare()
                     mediaPlayer!!.start()
                 } catch (e: IOException) {
@@ -226,7 +202,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun pauseMusic() {
+    private fun pauseMusic() {
         /* 暂停音乐的函数*/
         if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
             currentPausePositionInSong = mediaPlayer!!.currentPosition
@@ -247,13 +223,9 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getMediaPlayer() = mediaPlayer
-
     private fun onMusicChanged(localMusicBean: LocalMusicBean) {
         _localMusicBean.postValue(localMusicBean)
     }
-
-
 
     init {
         mediaPlayer = MediaPlayer()
@@ -262,4 +234,3 @@ class MainViewModel : ViewModel() {
         searchSong()
     }
 }
-//</editor-fold>

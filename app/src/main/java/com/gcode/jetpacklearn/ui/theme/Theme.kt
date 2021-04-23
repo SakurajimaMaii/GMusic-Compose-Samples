@@ -7,15 +7,15 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = bottom_layout_main_bg_color,
+    primaryVariant = bottom_layout_main_bg_color,
+    secondary = bottom_layout_main_bg_color
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = bottom_layout_main_bg_color,
+    primaryVariant = bottom_layout_main_bg_color,
+    secondary = bottom_layout_main_bg_color
 
     /* Other default colors to override
     background = Color.White,
@@ -28,7 +28,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun JetpackLearnTheme(
+fun MyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
