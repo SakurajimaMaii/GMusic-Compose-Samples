@@ -19,7 +19,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+<<<<<<< HEAD
 <!--    <style name="Theme.JetpackLearn.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
 <!--    <style name="Theme.JetpackLearn.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+=======
+    <style name="Theme.JetpackLearn.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.JetpackLearn.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+>>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
 </resources>

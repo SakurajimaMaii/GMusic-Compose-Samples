@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+<<<<<<< HEAD
     package="com.gcode.gmusiccomposesamples">
+=======
+    package="com.gcode.jetpacklearn">
+>>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -9,7 +13,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+<<<<<<< HEAD
         android:name="com.gcode.gmusiccomposesamples.utils.AppUtils"
+=======
+        android:name=".utils.AppUtils"
+>>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +26,11 @@
         android:theme="@style/Theme.JetpackLearn"
         android:requestLegacyExternalStorage="true" >
         <activity
+<<<<<<< HEAD
             android:name="com.gcode.gmusiccomposesamples.ui.activity.MainActivity"
+=======
+            android:name=".ui.activity.MainActivity"
+>>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
             android:theme="@style/Theme.JetpackLearn.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

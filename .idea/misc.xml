@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="..\:/WorkSpace/GitSpaceAndroid/GMusicComposeSamples/app/src/main/res/drawable/ic_add.xml" value="0.10092592592592593" />
+=======
+>>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
         <entry key="..\:/WorkSpace/GitSpaceAndroid/GMusicComposeSamples/app/src/main/res/drawable/ic_last.xml" value="0.32760416666666664" />
         <entry key="..\:/WorkSpace/GitSpaceAndroid/GMusicComposeSamples/app/src/main/res/drawable/ic_next.xml" value="0.32760416666666664" />
         <entry key="..\:/WorkSpace/GitSpaceAndroid/GMusicComposeSamples/app/src/main/res/drawable/ic_pause.xml" value="0.32760416666666664" />
