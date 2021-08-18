@@ -3,15 +3,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-<<<<<<< HEAD
         maven { url 'https://jitpack.io' }
-=======
-        jcenter {
-            content {
-                includeModule("org.jetbrains.kotlinx", "kotlinx-collections-immutable-jvm")
-            }
-        }
->>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
     }
 }
 rootProject.name = "GMusicComposeSamples"
