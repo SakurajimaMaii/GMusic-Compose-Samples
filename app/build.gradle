@@ -38,7 +38,7 @@ android {
         kotlinCompilerExtensionVersion "1.0.0-rc01"
     }
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
 }
 
 dependencies {

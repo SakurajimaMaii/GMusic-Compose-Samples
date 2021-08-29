@@ -2,12 +2,12 @@ package com.gcode.gmusiccomposesamples.ui.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,6 +24,7 @@ import java.util.*
  * @param modifier Modifier
  * @param viewModel ViewModel
  */
+@ExperimentalAnimationApi
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun MainActRV(

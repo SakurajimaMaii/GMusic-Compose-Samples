@@ -13,14 +13,4 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-
-    <<<<<<< HEAD
-<!--    <style name="Theme.JetpackLearn.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
-
-<!--    <style name="Theme.JetpackLearn.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />--><![CDATA[
-=======
-
-
-    >>>>>>> 045805cb0acc734e54cbba4ea52366a17c97543d
-]]>
 </resources>
