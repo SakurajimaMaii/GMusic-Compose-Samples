@@ -11,10 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.gcode.gmusiccomposesamples.R
@@ -37,6 +35,9 @@ import com.gcode.gmusiccomposesamples.ui.theme.MyTheme
 import com.gcode.gmusiccomposesamples.ui.theme.bottom_layout_main_bg_color
 import com.gcode.gmusiccomposesamples.viewModel.MainViewModel
 import com.gcode.tools.utils.MsgWindowUtils
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.permissionx.guolindev.PermissionX
 
 class MainActivity : FragmentActivity() {
@@ -47,6 +48,8 @@ class MainActivity : FragmentActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window,false)
 
         PermissionX.init(this)
             .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -62,59 +65,69 @@ class MainActivity : FragmentActivity() {
 
         setContent {
             MyTheme(darkTheme = false) {
-                // A surface container using the 'background' color from the theme
-                Surface {
-                    var expanded by remember { mutableStateOf(false) }
+                ProvideWindowInsets {
+                    Surface {
+                        rememberSystemUiController().setStatusBarColor(
+                            Color.Transparent, darkIcons = MaterialTheme.colors.isLight)
 
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
-                        scaffoldState = rememberScaffoldState(),
-                        topBar = {
-                            val title = stringResource(id = R.string.app_name)
+                        var expanded by remember { mutableStateOf(false) }
 
-                            MainActTopBar(
-                                title = { Text(title) },
-                                icon = {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_app),
-                                        modifier = Modifier.size(40.dp),
-                                        contentDescription = "App图标"
+                        Column {
+                            Spacer(modifier = Modifier
+                                .statusBarsHeight()
+                                .fillMaxWidth().background(MaterialTheme.colors.primarySurface))
+
+                            Scaffold(
+                                modifier = Modifier.fillMaxSize(),
+                                scaffoldState = rememberScaffoldState(),
+                                topBar = {
+                                    val title = stringResource(id = R.string.app_name)
+
+                                    MainActTopBar(
+                                        title = { Text(title) },
+                                        icon = {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_app),
+                                                modifier = Modifier.size(40.dp),
+                                                contentDescription = "App图标"
+                                            )
+                                        },
+                                        more = {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.ic_search),
+                                                    modifier = Modifier
+                                                        .size(40.dp)
+                                                        .padding(5.dp)
+                                                        .clickable {
+                                                            expanded = !expanded
+                                                            viewModel.onExpandedChanged(expanded)
+                                                        },
+                                                    contentDescription = "搜索按钮"
+                                                )
+//                                                Image(
+//                                                    painter = painterResource(id = R.drawable.ic_theme),
+//                                                    modifier = Modifier
+//                                                        .size(40.dp)
+//                                                        .padding(5.dp),
+//                                                    contentDescription = "主题设置按钮"
+//                                                )
+                                            }
+                                        },
                                     )
                                 },
-                                more = {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_search),
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .padding(5.dp)
-                                                .clickable {
-                                                    expanded = !expanded
-                                                    viewModel.onExpandedChanged(expanded)
-                                                },
-                                            contentDescription = "搜索按钮"
-                                        )
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_theme),
-                                            modifier = Modifier
-                                                .size(40.dp)
-                                                .padding(5.dp),
-                                            contentDescription = "主题设置按钮"
-                                        )
+                                content = {
+                                    Column {
+                                        MainActSV(viewModel)
+                                        MainActRV(Modifier.weight(1f), viewModel = viewModel)
+                                        BottomControlLayout()
                                     }
                                 }
                             )
-                        },
-                        content = {
-                            Column {
-                                MainActSV(viewModel)
-                                MainActRV(Modifier.weight(1f), viewModel = viewModel)
-                                BottomControlLayout()
-                            }
                         }
-                    )
+                    }
                 }
             }
         }

@@ -37,7 +37,8 @@ fun MainActTopBar(
         contentColor,
         contentPadding,
         elevation,
-        modifier
+        modifier,
+        backgroundColor
     ){
         if (icon == null) {
             Spacer(TitleInsetWithoutIcon)
@@ -82,6 +83,7 @@ private fun TopBar(
     contentPadding:PaddingValues,
     elevation: Dp,
     modifier: Modifier,
+    backgroundColor: Color,
     content: @Composable RowScope.() -> Unit
 ){
     Surface(

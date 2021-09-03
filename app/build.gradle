@@ -37,7 +37,7 @@ android {
         kotlinCompilerVersion "1.5.10"
         kotlinCompilerExtensionVersion "1.0.0-rc01"
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion '30.0.3'
 }
 
@@ -47,33 +47,37 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
 
-    implementation 'androidx.compose.ui:ui:1.1.0-alpha01'
+    implementation 'androidx.compose.ui:ui:1.1.0-alpha02'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.1.0-alpha01'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.0-alpha02'
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation 'androidx.compose.foundation:foundation:1.1.0-alpha01'
+    implementation 'androidx.compose.foundation:foundation:1.1.0-alpha02'
     // Material Design
-    implementation 'androidx.compose.material:material:1.1.0-alpha01'
+    implementation 'androidx.compose.material:material:1.1.0-alpha02'
     // Material design icons
-    implementation 'androidx.compose.material:material-icons-core:1.1.0-alpha01'
-    implementation 'androidx.compose.material:material-icons-extended:1.1.0-alpha01'
+    implementation 'androidx.compose.material:material-icons-core:1.1.0-alpha02'
+    implementation 'androidx.compose.material:material-icons-extended:1.1.0-alpha02'
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.3.1'
     // Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
     // Integration with observables
-    implementation "androidx.compose.runtime:runtime:1.1.0-alpha01"
-    implementation 'androidx.compose.runtime:runtime-livedata:1.1.0-alpha01'
-    implementation 'androidx.compose.runtime:runtime-rxjava2:1.1.0-alpha01'
+    implementation "androidx.compose.runtime:runtime:1.1.0-alpha02"
+    implementation 'androidx.compose.runtime:runtime-livedata:1.1.0-alpha02'
+    implementation 'androidx.compose.runtime:runtime-rxjava2:1.1.0-alpha02'
 
     //外部依赖项
-    implementation 'com.github.SakurajimaMaii:Utils:dev-2.0.0'
-    implementation 'com.guolindev.permissionx:permissionx:1.5.0'
+    implementation 'com.github.SakurajimaMaii:Utils:2.2.0'
+    implementation 'com.guolindev.permissionx:permissionx:1.5.1'
+
+    implementation 'com.google.accompanist:accompanist-insets:0.17.0'
+    implementation 'com.google.accompanist:accompanist-insets-ui:0.17.0'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.17.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.1.0-alpha01"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.1.0-alpha02"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
