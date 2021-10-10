@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -25,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.gcode.gmusiccomposesamples.R
 import com.gcode.gmusiccomposesamples.model.LocalMusicBean
 import com.gcode.gmusiccomposesamples.ui.components.MainActRV
@@ -42,7 +42,7 @@ import com.permissionx.guolindev.PermissionX
 
 class MainActivity : FragmentActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModels<MainViewModel>()
 
     @ExperimentalAnimationApi
     @RequiresApi(Build.VERSION_CODES.R)
@@ -60,8 +60,6 @@ class MainActivity : FragmentActivity() {
                     MsgWindowUtils.showShortMsg(this, "以下权限未被授予$deniedList")
                 }
             }
-
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         setContent {
             MyTheme(darkTheme = false) {
@@ -107,21 +105,14 @@ class MainActivity : FragmentActivity() {
                                                         },
                                                     contentDescription = "搜索按钮"
                                                 )
-//                                                Image(
-//                                                    painter = painterResource(id = R.drawable.ic_theme),
-//                                                    modifier = Modifier
-//                                                        .size(40.dp)
-//                                                        .padding(5.dp),
-//                                                    contentDescription = "主题设置按钮"
-//                                                )
                                             }
                                         },
                                     )
                                 },
                                 content = {
                                     Column {
-                                        MainActSV(viewModel)
-                                        MainActRV(Modifier.weight(1f), viewModel = viewModel)
+                                        MainActSV()
+                                        MainActRV(Modifier.weight(1f))
                                         BottomControlLayout()
                                     }
                                 }
@@ -156,6 +147,7 @@ class MainActivity : FragmentActivity() {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
+            // 歌曲图标
             Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 Image(
                     painter = painterResource(id = R.drawable.user),
@@ -166,48 +158,51 @@ class MainActivity : FragmentActivity() {
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
             }
-            Box(Modifier.weight(2f)) {
-                Column(Modifier.fillMaxWidth()) {
-                    Text(localMusicBean.song, style = TextStyle(color = Color.White))
-                    Text(localMusicBean.singer, style = TextStyle(color = Color.White))
-                }
+
+            // 歌曲信息
+            Column(Modifier.fillMaxWidth().weight(2f)) {
+                Text(localMusicBean.song, style = TextStyle(color = Color.White))
+                Text(localMusicBean.singer, style = TextStyle(color = Color.White))
             }
-            Box(Modifier.weight(2f)) {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
 
-                    val isPlaying by viewModel.isPlaying.observeAsState(false)
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .weight(2f),
+                verticalAlignment = Alignment.CenterVertically, //设置垂直方向对齐
+                horizontalArrangement = Arrangement.spacedBy(10.dp) //设置子项的间距
+            ) {
 
-                    Image(painter = painterResource(id = R.drawable.ic_last),
-                        contentDescription = "上一首",
-                        modifier = Modifier
-                            .clickable { viewModel.playLastMusic() }
-                            .size(30.dp)
-                    )
+                val isPlaying by viewModel.isPlaying.observeAsState(false)
 
-                    Image(painter = if (isPlaying) {
-                        painterResource(id = R.drawable.ic_pause)
-                    } else {
-                        painterResource(id = R.drawable.ic_play)
-                    },
-                        contentDescription = "播放或者暂停",
-                        modifier = Modifier
-                            .clickable { viewModel.playCurrentMusic() }
-                            .size(60.dp)
-                            .padding(10.dp)
-                    )
+                // 上一首按钮
+                Image(painter = painterResource(id = R.drawable.ic_last),
+                    contentDescription = "上一首",
+                    modifier = Modifier
+                        .clickable { viewModel.playLastMusic() }
+                        .size(30.dp)
+                )
 
-                    Image(painter = painterResource(id = R.drawable.ic_next),
-                        contentDescription = "下一首",
-                        modifier = Modifier
-                            .clickable { viewModel.playNextMusic() }
-                            .size(30.dp)
-                    )
-                }
+                // 播放暂停按钮
+                Image(painter = if (isPlaying) {
+                    painterResource(id = R.drawable.ic_pause)
+                } else {
+                    painterResource(id = R.drawable.ic_play)
+                },
+                    contentDescription = "播放或者暂停",
+                    modifier = Modifier
+                        .clickable { viewModel.playCurrentMusic() }
+                        .size(40.dp)
+                )
+
+                // 下一首按钮
+                Image(painter = painterResource(id = R.drawable.ic_next),
+                    contentDescription = "下一首",
+                    modifier = Modifier
+                        .clickable { viewModel.playNextMusic() }
+                        .size(30.dp)
+                )
             }
         }
     }

@@ -24,21 +24,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gcode.gmusiccomposesamples.viewModel.MainViewModel
 
-@RequiresApi(Build.VERSION_CODES.Q)
+/**
+ * 解决方案参考
+ * https://www.reddit.com/r/android_devs/comments/jff2vp/jetpack_compose_am_i_stupid_or_is_the_by_remember/
+ */
+@RequiresApi(Build.VERSION_CODES.R)
 @ExperimentalAnimationApi
 @Composable
 fun MainActSV(
-    viewModel: ViewModel
+    vm: MainViewModel = viewModel()
 ) {
-    /**
-     * 解决方案参考
-     * https://www.reddit.com/r/android_devs/comments/jff2vp/jetpack_compose_am_i_stupid_or_is_the_by_remember/
-     */
-    val visible by (viewModel as MainViewModel).expanded.observeAsState(false)
+    // 搜索框可见性
+    val visible by vm.expanded.observeAsState(false)
 
+    // 待搜索的歌曲
     var targetSong by rememberSaveable { mutableStateOf("") }
 
     AnimatedVisibility(
@@ -54,7 +56,7 @@ fun MainActSV(
                     onValueChange = {
                         targetSong = it
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            (viewModel as MainViewModel).searchSong(it)
+                            vm.searchSong(it)
                         }
                     },
                     label = { Text("请输入歌曲名") },

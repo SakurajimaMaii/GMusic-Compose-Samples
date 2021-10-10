@@ -12,22 +12,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gcode.gmusiccomposesamples.model.LocalMusicBean
 import com.gcode.gmusiccomposesamples.ui.theme.song_tv_color
 import com.gcode.gmusiccomposesamples.viewModel.MainViewModel
 
 /**
  * 列表Item布局
- * @param localMusicBean LocalMusicBean
- * @param viewModel MainViewModel
+ * @param localMusicBean
+ * @param vm
  */
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
-fun LocalMusicRVItem(localMusicBean: LocalMusicBean, viewModel: MainViewModel) {
+fun LocalMusicRVItem(localMusicBean: LocalMusicBean, vm: MainViewModel = viewModel()) {
 
     Column(modifier = Modifier
         .clickable {
-            viewModel.playMusicInMusicBean(localMusicBean)
+            vm.playMusicInMusicBean(localMusicBean)
         }
         .height(IntrinsicSize.Min)) {
 
@@ -48,7 +49,9 @@ fun LocalMusicRVItem(localMusicBean: LocalMusicBean, viewModel: MainViewModel) {
             Text(
                 localMusicBean.singer,
                 modifier = Modifier
-                    .padding(5.dp).wrapContentWidth(Alignment.Start).weight(1f),
+                    .padding(5.dp)
+                    .wrapContentWidth(Alignment.Start)
+                    .weight(1f),
                 style = TextStyle(
                     color = song_tv_color
                 )
@@ -57,7 +60,9 @@ fun LocalMusicRVItem(localMusicBean: LocalMusicBean, viewModel: MainViewModel) {
             Text(
                 localMusicBean.duration,
                 modifier = Modifier
-                    .padding(5.dp).wrapContentWidth(Alignment.End).weight(1f),
+                    .padding(5.dp)
+                    .wrapContentWidth(Alignment.End)
+                    .weight(1f),
                 style = TextStyle(
                     color = song_tv_color
                 )
