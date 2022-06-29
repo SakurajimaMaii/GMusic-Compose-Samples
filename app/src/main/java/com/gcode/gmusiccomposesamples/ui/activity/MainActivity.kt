@@ -1,10 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 VastGui
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.gcode.gmusiccomposesamples.ui.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -25,7 +49,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.FragmentActivity
 import com.gcode.gmusiccomposesamples.R
 import com.gcode.gmusiccomposesamples.model.LocalMusicBean
 import com.gcode.gmusiccomposesamples.ui.components.MainActRV
@@ -34,20 +57,19 @@ import com.gcode.gmusiccomposesamples.ui.components.MainActTopBar
 import com.gcode.gmusiccomposesamples.ui.theme.MyTheme
 import com.gcode.gmusiccomposesamples.ui.theme.bottom_layout_main_bg_color
 import com.gcode.gmusiccomposesamples.viewModel.MainViewModel
-import com.gcode.tools.utils.MsgWindowUtils
+import com.gcode.vasttools.activity.VastVmActivity
+import com.gcode.vasttools.utils.ToastUtils
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.permissionx.guolindev.PermissionX
 
-class MainActivity : FragmentActivity() {
+class MainActivity(override val layoutId: Int = 0) : VastVmActivity<MainViewModel>() {
 
-    private val viewModel by viewModels<MainViewModel>()
-
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @ExperimentalAnimationApi
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView(savedInstanceState: Bundle?) {
 
         WindowCompat.setDecorFitsSystemWindows(window,false)
 
@@ -55,9 +77,9 @@ class MainActivity : FragmentActivity() {
             .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
             .request { allGranted, _, deniedList ->
                 if (allGranted) {
-                    MsgWindowUtils.showShortMsg(this, "所有权限已经授权,如果没有歌曲显示请重启应用")
+                    ToastUtils.showShortMsg(this, "所有权限已经授权,如果没有歌曲显示请重启应用")
                 } else {
-                    MsgWindowUtils.showShortMsg(this, "以下权限未被授予$deniedList")
+                    ToastUtils.showShortMsg(this, "以下权限未被授予$deniedList")
                 }
             }
 
@@ -101,7 +123,7 @@ class MainActivity : FragmentActivity() {
                                                         .padding(5.dp)
                                                         .clickable {
                                                             expanded = !expanded
-                                                            viewModel.onExpandedChanged(expanded)
+                                                            mViewModel.onExpandedChanged(expanded)
                                                         },
                                                     contentDescription = "搜索按钮"
                                                 )
@@ -127,14 +149,14 @@ class MainActivity : FragmentActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.stopMusic()
+        mViewModel.stopMusic()
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
     @Composable
     fun BottomControlLayout() {
 
-        val localMusicBean: LocalMusicBean by viewModel.localMusicBean.observeAsState(
+        val localMusicBean: LocalMusicBean by mViewModel.localMusicBean.observeAsState(
             LocalMusicBean()
         )
 
@@ -174,13 +196,13 @@ class MainActivity : FragmentActivity() {
                 horizontalArrangement = Arrangement.spacedBy(10.dp) //设置子项的间距
             ) {
 
-                val isPlaying by viewModel.isPlaying.observeAsState(false)
+                val isPlaying by mViewModel.isPlaying.observeAsState(false)
 
                 // 上一首按钮
                 Image(painter = painterResource(id = R.drawable.ic_last),
                     contentDescription = "上一首",
                     modifier = Modifier
-                        .clickable { viewModel.playLastMusic() }
+                        .clickable { mViewModel.playLastMusic() }
                         .size(30.dp)
                 )
 
@@ -192,7 +214,7 @@ class MainActivity : FragmentActivity() {
                 },
                     contentDescription = "播放或者暂停",
                     modifier = Modifier
-                        .clickable { viewModel.playCurrentMusic() }
+                        .clickable { mViewModel.playCurrentMusic() }
                         .size(40.dp)
                 )
 
@@ -200,7 +222,7 @@ class MainActivity : FragmentActivity() {
                 Image(painter = painterResource(id = R.drawable.ic_next),
                     contentDescription = "下一首",
                     modifier = Modifier
-                        .clickable { viewModel.playNextMusic() }
+                        .clickable { mViewModel.playNextMusic() }
                         .size(30.dp)
                 )
             }

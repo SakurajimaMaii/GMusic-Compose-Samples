@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 VastGui
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 //<editor-fold desc="Description">
 package com.gcode.gmusiccomposesamples.viewModel
 
@@ -14,8 +38,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gcode.gmusiccomposesamples.model.LocalMusicBean
-import com.gcode.gmusiccomposesamples.utils.AppUtils
-import com.gcode.tools.utils.MsgWindowUtils
+import com.gcode.vasttools.helper.ContextHelper
+import com.gcode.vasttools.utils.ToastUtils
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,11 +96,11 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "Range")
     private fun loadLocalMusicData() {
         //加载本地文件到集合中
         //获取ContentResolver对象
-        val resolver = AppUtils.context.contentResolver
+        val resolver = ContextHelper.getAppContext().contentResolver
         //获取本地存储的Uri地址
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         //开始查询地址
@@ -86,10 +110,10 @@ class MainViewModel : ViewModel() {
         //设立条件过滤掉一部分歌曲
         when {
             cursor == null -> {
-                Log.e(AppUtils.context.packageName, "query failed, handle error.")
+                Log.e(ContextHelper.getAppContext().packageName, "query failed, handle error.")
             }
             !cursor.moveToFirst() -> {
-                MsgWindowUtils.showShortMsg(AppUtils.context, "设备上没有歌曲")
+                ToastUtils.showShortMsg(ContextHelper.getAppContext(), "设备上没有歌曲")
             }
             else -> {
                 val sliderLastAdjusted = System.currentTimeMillis()
@@ -114,7 +138,7 @@ class MainViewModel : ViewModel() {
 
     fun playLastMusic(){
         if(currentPlayPosition==0||currentPlayPosition==-1){
-            MsgWindowUtils.showShortMsg(AppUtils.context, "已经是第一首了，没有上一曲！")
+            ToastUtils.showShortMsg(ContextHelper.getAppContext(), "已经是第一首了，没有上一曲！")
         }else{
             //获取上一首歌曲
             val lastMusicBean = mData[currentPlayPosition-1]
@@ -125,7 +149,7 @@ class MainViewModel : ViewModel() {
 
     fun playCurrentMusic(){
         if (currentPlayPosition == -1) {
-            MsgWindowUtils.showShortMsg(AppUtils.context, "请选择想要播放的音乐")
+            ToastUtils.showShortMsg(ContextHelper.getAppContext(), "请选择想要播放的音乐")
         } else {
             if (mediaPlayer.isPlaying) {
                 //此时处于播放状态，需要暂停音乐
@@ -139,7 +163,7 @@ class MainViewModel : ViewModel() {
 
     fun playNextMusic(){
         if(currentPlayPosition==mData.size-1||currentPlayPosition==mData.size){
-            MsgWindowUtils.showShortMsg(AppUtils.context, "已经是最后一首了，没有下一曲！")
+            ToastUtils.showShortMsg(ContextHelper.getAppContext(), "已经是最后一首了，没有下一曲！")
         }else{
             //获取上一首歌曲
             val nextMusicBean = mData[currentPlayPosition+1]
@@ -169,7 +193,7 @@ class MainViewModel : ViewModel() {
                     )
                 }.let {
                     setDataSource(
-                        AppUtils.context,
+                        ContextHelper.getAppContext(),
                         it
                     )
                 }

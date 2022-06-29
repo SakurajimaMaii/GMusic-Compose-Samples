@@ -1,3 +1,27 @@
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2022 VastGui
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
 <vector android:height="50dp" android:viewportHeight="1024"
     android:viewportWidth="1024" android:width="50dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#00ABE0" android:pathData="M523.52,998.4C418.56,998.4 332.8,912.64 332.8,807.68s85.12,-190.72 190.72,-190.72c53.76,0 103.04,21.76 138.88,60.16L662.4,112c0,-4.48 3.2,-7.68 7.68,-7.68h36.48c4.48,0 7.68,3.2 7.68,7.68v21.12c23.04,5.12 37.76,16.64 52.48,28.16 17.92,14.08 34.56,27.52 68.48,27.52 30.08,0 46.72,-10.88 60.8,-21.76 17.92,-13.44 40.96,-16 61.44,-6.4 19.84,9.6 32,29.44 32,51.84v170.24c0,2.56 -1.28,5.12 -3.2,6.4 -1.92,1.28 -5.12,1.92 -7.04,0.64 -37.12,-16.64 -51.84,-6.4 -72.32,8.32 -17.28,12.16 -36.48,24.96 -71.04,24.96 -39.04,0 -58.88,-16 -78.08,-30.72 -12.8,-10.24 -24.96,-19.84 -42.88,-24.32v439.68c-1.28,104.96 -86.4,190.72 -191.36,190.72zM523.52,632.32c-96.64,0 -175.36,78.72 -175.36,175.36 0,96.64 78.72,175.36 175.36,175.36 96.64,0 175.36,-78.72 175.36,-175.36L698.88,359.04c0,-1.92 1.28,-4.48 2.56,-5.76 1.92,-1.28 3.84,-1.92 6.4,-1.92 26.88,4.48 42.88,17.28 58.88,29.44 17.92,14.08 34.56,27.52 68.48,27.52 29.44,0 46.08,-11.52 62.08,-22.4 19.2,-13.44 39.04,-26.88 76.8,-14.08L974.08,213.12c0,-16.64 -8.96,-30.72 -23.68,-38.4 -14.72,-7.68 -32,-5.76 -45.44,4.48 -15.36,12.16 -35.2,24.96 -69.76,24.96 -39.04,0 -58.88,-16 -78.08,-30.72 -14.72,-11.52 -28.16,-23.04 -51.84,-26.24 -3.84,-0.64 -6.4,-3.84 -6.4,-7.68v-19.84h-21.12v579.2c0,3.2 -1.92,6.4 -5.12,7.04 -3.2,1.28 -6.4,0 -8.32,-2.56 -33.92,-44.8 -85.12,-71.04 -140.8,-71.04z"/>
