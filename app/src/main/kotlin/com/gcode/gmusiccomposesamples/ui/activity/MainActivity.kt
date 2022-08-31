@@ -24,11 +24,11 @@
 
 package com.gcode.gmusiccomposesamples.ui.activity
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -57,31 +57,21 @@ import com.gcode.gmusiccomposesamples.ui.components.MainActTopBar
 import com.gcode.gmusiccomposesamples.ui.theme.MyTheme
 import com.gcode.gmusiccomposesamples.ui.theme.bottom_layout_main_bg_color
 import com.gcode.gmusiccomposesamples.viewModel.MainViewModel
-import com.gcode.vasttools.activity.VastVmActivity
-import com.gcode.vasttools.utils.ToastUtils
+import com.gcode.vasttools.activity.VastComposeActivity
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.permissionx.guolindev.PermissionX
 
-class MainActivity(override val layoutId: Int = 0) : VastVmActivity<MainViewModel>() {
+class MainActivity : VastComposeActivity() {
+
+    private val mViewModel:MainViewModel by viewModels()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @ExperimentalAnimationApi
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun initView(savedInstanceState: Bundle?) {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window,false)
-
-        PermissionX.init(this)
-            .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    ToastUtils.showShortMsg(this, "所有权限已经授权,如果没有歌曲显示请重启应用")
-                } else {
-                    ToastUtils.showShortMsg(this, "以下权限未被授予$deniedList")
-                }
-            }
 
         setContent {
             MyTheme(darkTheme = false) {
