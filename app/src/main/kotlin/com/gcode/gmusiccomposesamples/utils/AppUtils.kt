@@ -25,13 +25,14 @@
 package com.gcode.gmusiccomposesamples.utils
 
 import android.app.Application
+import com.gcode.vasttools.ToolsConfig
 import com.gcode.vasttools.helper.ContextHelper
 
 class AppUtils:Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ContextHelper.init(this)
+        ToolsConfig.init(this)
     }
 
 }
